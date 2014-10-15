@@ -2,12 +2,8 @@
 namespace BackendService
 {
     using System.Reflection;
-
     using Autofac;
     using Autofac.Integration.WebApi;
-
-    using BackendService.Controllers;
-
     using Biz.Account;
 
     public class Bootstrapper

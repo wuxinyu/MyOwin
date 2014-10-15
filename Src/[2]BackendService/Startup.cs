@@ -6,27 +6,37 @@ using Owin;
 [assembly: OwinStartup(typeof(BackendService.Startup))]
 namespace BackendService
 {
-    using System.Reflection;
-
     using Autofac;
     using Autofac.Integration.WebApi;
 
-    using Microsoft.Owin.Logging;
-
     public class Startup
     {
+        private readonly HttpConfiguration configuration;
+
+        private IContainer container;
+
+        public Startup()
+        {
+            this.configuration = new HttpConfiguration();
+            this.configuration.MapHttpAttributeRoutes();
+            var builder = Bootstrapper.CreateContainerBuilder();
+            var defaultContainer = builder.Build();
+            this.WithContainer(defaultContainer);
+        }
+
+        public Startup WithContainer(IContainer injectedContainer)
+        {
+            this.container = injectedContainer;
+            this.configuration.DependencyResolver = new AutofacWebApiDependencyResolver(injectedContainer);
+            return this;
+        }
+
         public void Configuration(IAppBuilder app)
         {
             app.UseErrorPage();
             app.UseWelcomePage("/");
-            var config = new HttpConfiguration();
-            config.MapHttpAttributeRoutes();
-            var builder = Bootstrapper.CreateContainerBuilder();
-            var container = builder.Build();
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-            app.UseAutofacMiddleware(container);
-            app.UseAutofacWebApi(GlobalConfiguration.Configuration);            
-            app.UseWebApi(config);
-        }
+            app.UseAutofacMiddleware(this.container);
+            app.UseWebApi(this.configuration);
+        } 
     }
 }
