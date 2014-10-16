@@ -42,7 +42,22 @@
   <ItemGroup>
     <Compile Include="Account\IAccountService.cs" />
     <Compile Include="Account\UserModel.cs" />
+    <Compile Include="Project\Entity\Project.cs" />
+    <Compile Include="Project\Event\ProjectCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Test\[9]Infrastructure.Test\[9]Infrastructure.Test.csproj">
+      <Project>{e14a6586-351b-4f0d-95e9-f6fba5c3a616}</Project>
+      <Name>[9]Infrastructure.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\[9]Infrastructure\[9]Infrastructure.csproj">
+      <Project>{B8B33FF9-49C9-4AA9-B9E4-0BCF1B1BCF5A}</Project>
+      <Name>[9]Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Project\Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

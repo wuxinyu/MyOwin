@@ -6,8 +6,18 @@ using Owin;
 [assembly: OwinStartup(typeof(BackendService.Startup))]
 namespace BackendService
 {
+    using System;
+    using System.Linq;
+    using System.Net.Http.Formatting;
+
     using Autofac;
     using Autofac.Integration.WebApi;
+
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security.Cookies;
+
+    using Newtonsoft.Json.Serialization;
 
     public class Startup
     {
@@ -18,6 +28,8 @@ namespace BackendService
         public Startup()
         {
             this.configuration = new HttpConfiguration();
+            var jsonFormat = this.configuration.Formatters.OfType<JsonMediaTypeFormatter>().First();
+            jsonFormat.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             this.configuration.MapHttpAttributeRoutes();
             var builder = Bootstrapper.CreateContainerBuilder();
             var defaultContainer = builder.Build();
